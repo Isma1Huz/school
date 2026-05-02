@@ -65,10 +65,11 @@ class DatabaseSeeder extends Seeder
         $superAdmin = User::withoutGlobalScopes()->firstOrCreate(
             ['email' => 'superadmin@schoolzee.test'],
             [
-                'name'      => 'Super Admin',
-                'password'  => Hash::make('password'),
-                'user_type' => 'super_admin',
-                'is_active' => true,
+                'name'               => 'Super Admin',
+                'password'           => Hash::make('password'),
+                'user_type'          => 'super_admin',
+                'is_active'          => true,
+                'email_verified_at'  => now(),
             ]
         );
         $superAdmin->syncRoles(['super_admin']);
@@ -77,10 +78,11 @@ class DatabaseSeeder extends Seeder
         $socAdmin = User::withoutGlobalScopes()->firstOrCreate(
             ['email' => 'soc@schoolzee.test'],
             [
-                'name'      => 'SOC Admin',
-                'password'  => Hash::make('password'),
-                'user_type' => 'soc_admin',
-                'is_active' => true,
+                'name'               => 'SOC Admin',
+                'password'           => Hash::make('password'),
+                'user_type'          => 'soc_admin',
+                'is_active'          => true,
+                'email_verified_at'  => now(),
             ]
         );
         $socAdmin->syncRoles(['soc_admin']);
@@ -89,11 +91,12 @@ class DatabaseSeeder extends Seeder
         $tenantAdmin = User::withoutGlobalScopes()->where('email', 'admin@demo.test')->first();
         if (!$tenantAdmin) {
             $tenantAdmin = new User([
-                'name'      => 'Demo Admin',
-                'password'  => Hash::make('password'),
-                'user_type' => 'tenant_admin',
-                'is_active' => true,
-                'email'     => 'admin@demo.test',
+                'name'               => 'Demo Admin',
+                'password'           => Hash::make('password'),
+                'user_type'          => 'tenant_admin',
+                'is_active'          => true,
+                'email'              => 'admin@demo.test',
+                'email_verified_at'  => now(),
             ]);
             $tenantAdmin->tenant_id = $tenant->id;
             $tenantAdmin->save();
