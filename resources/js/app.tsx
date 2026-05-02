@@ -10,9 +10,18 @@ createInertiaApp({
 
     resolve: (name) => {
         const pages = import.meta.glob<{ default: React.ComponentType }>('./pages/**/*.tsx', { eager: true });
-        const page = pages[`./pages/${name}.tsx`];
-        if (!page) throw new Error(`Page not found: ${name}`);
-        return page;
+
+        // Direct match (exact case)
+        if (pages[`./pages/${name}.tsx`]) {
+            return pages[`./pages/${name}.tsx`];
+        }
+
+        // Case-insensitive fallback (controllers use PascalCase, files use lowercase dirs)
+        const needle = `./pages/${name}.tsx`.toLowerCase();
+        const match = Object.entries(pages).find(([key]) => key.toLowerCase() === needle);
+        if (match) return match[1];
+
+        throw new Error(`Page not found: ${name}`);
     },
 
     strictMode: true,

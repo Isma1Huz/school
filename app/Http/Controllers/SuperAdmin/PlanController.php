@@ -11,6 +11,21 @@ use Inertia\Response;
 
 class PlanController extends Controller
 {
+    public function create(): Response
+    {
+        return Inertia::render('SuperAdmin/SubscriptionPlans/Create');
+    }
+
+    public function show(SubscriptionPlan $plan): \Illuminate\Http\RedirectResponse
+    {
+        return redirect()->route('super-admin.plans.index');
+    }
+
+    public function edit(SubscriptionPlan $plan): Response
+    {
+        return Inertia::render('SuperAdmin/SubscriptionPlans/Edit', compact('plan'));
+    }
+
     public function index(): Response
     {
         $plans = SubscriptionPlan::withCount('tenants')
