@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Core\NotificationController;
 use App\Http\Controllers\Tenant\DashboardController;
 use App\Http\Controllers\Tenant\RolesController;
 use App\Http\Controllers\Tenant\SettingsController;
@@ -15,7 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 });
 
-Route::middleware(['auth', 'tenant'])->group(function () {
+Route::middleware(['auth', 'tenant', 'subscription.active'])->group(function () {
     // Tenant dashboard
     Route::get('tenant/dashboard', [DashboardController::class, 'index'])->name('tenant.dashboard');
 
@@ -34,6 +35,11 @@ Route::middleware(['auth', 'tenant'])->group(function () {
     Route::get('settings/permissions', [SettingsController::class, 'permissions'])->name('settings.permissions');
     Route::put('settings/permissions', [SettingsController::class, 'updatePermissions'])->name('settings.permissions.update');
     Route::get('settings/subscription', [SettingsController::class, 'subscription'])->name('settings.subscription');
+
+    // In-app notification bell API (JSON responses)
+    Route::get('notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
+    Route::post('notifications/{notificationId}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
 });
 
 

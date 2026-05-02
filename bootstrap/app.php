@@ -24,11 +24,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'tenant'       => \App\Http\Middleware\TenantMiddleware::class,
-            'super_admin'  => \App\Http\Middleware\SuperAdminMiddleware::class,
-            'soc'          => \App\Http\Middleware\SocMiddleware::class,
-            'module'       => \App\Http\Middleware\ModuleAccessMiddleware::class,
-            'ip.blacklist' => \App\Http\Middleware\IpBlacklistMiddleware::class,
+            'tenant'              => \App\Http\Middleware\TenantMiddleware::class,
+            'super_admin'         => \App\Http\Middleware\SuperAdminMiddleware::class,
+            'soc'                 => \App\Http\Middleware\SocMiddleware::class,
+            'module'              => \App\Http\Middleware\ModuleAccessMiddleware::class,
+            'ip.blacklist'        => \App\Http\Middleware\IpBlacklistMiddleware::class,
+            'subscription.active' => \App\Http\Middleware\EnsureSubscriptionIsActive::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

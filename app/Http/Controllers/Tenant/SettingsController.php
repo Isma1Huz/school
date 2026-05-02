@@ -126,9 +126,14 @@ class SettingsController extends Controller
     public function subscription(): Response
     {
         /** @var Tenant $tenant */
-        $tenant       = app('tenant');
-        $usedUsers    = $tenant->users()->count();
-        $usedStorageMb = 0; // placeholder
+        $tenant    = app('tenant');
+        $usedUsers = $tenant->users()->count();
+
+        // Sum actual media file sizes for this tenant (bytes → MB)
+        $usedStorageMb = (int) round(
+            \Spatie\MediaLibrary\MediaCollections\Models\Media::where('tenant_id', $tenant->id)
+                ->sum('size') / (1024 * 1024)
+        );
 
         return Inertia::render('Tenant/Settings/Subscription', [
             'tenant'        => $this->formatTenant($tenant),

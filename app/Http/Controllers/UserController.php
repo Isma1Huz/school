@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -60,7 +61,28 @@ class UserController extends Controller
         $tenant = app('tenant');
         $user   = $tenant->users()->findOrFail($id);
 
-        return Inertia::render('Tenant/Users/Edit', ['user' => $user]);
+        // List tenant-specific roles (prefixed with "t{tenantId}_")
+        $prefix = "t{$tenant->id}_";
+        $roles  = Role::where('name', 'like', $prefix . '%')
+            ->where('guard_name', 'web')
+            ->get()
+            ->map(fn ($r) => [
+                'id'   => $r->id,
+                'name' => str_replace($prefix, '', $r->name),
+            ]);
+
+        // Current tenant roles assigned to the user
+        $userRoles = $user->roles()
+            ->where('name', 'like', $prefix . '%')
+            ->pluck('name')
+            ->map(fn ($n) => str_replace($prefix, '', $n))
+            ->toArray();
+
+        return Inertia::render('Tenant/Users/Edit', [
+            'user'      => $user,
+            'roles'     => $roles,
+            'userRoles' => $userRoles,
+        ]);
     }
 
     public function update(Request $request, int $id): RedirectResponse
@@ -79,7 +101,16 @@ class UserController extends Controller
             'user_type' => ['nullable', 'string', 'max:50'],
             'phone'     => ['nullable', 'string', 'max:50'],
             'is_active' => ['boolean'],
+            'roles'     => ['nullable', 'array'],
         ]);
+
+        // Sync tenant-scoped roles if provided
+        if (array_key_exists('roles', $data)) {
+            $prefix       = "t{$tenant->id}_";
+            $prefixedRoles = array_map(fn ($r) => $prefix . $r, $data['roles'] ?? []);
+            unset($data['roles']);
+            $user->syncRoles($prefixedRoles);
+        }
 
         $this->userService->updateUser($user, $data);
 

@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\CheckSubscriptionExpiry;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Inertia\Inertia;
+use Laravel\Fortify\Fortify;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +27,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureFortifyViews();
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([CheckSubscriptionExpiry::class]);
+        }
     }
 
     /**
@@ -45,6 +53,16 @@ class AppServiceProvider extends ServiceProvider
                 ->symbols()
                 ->uncompromised()
             : null,
+        );
+    }
+
+    /**
+     * Register Inertia-based views for Fortify features that need custom pages.
+     */
+    protected function configureFortifyViews(): void
+    {
+        Fortify::twoFactorChallengeView(
+            fn () => Inertia::render('auth/two-factor-challenge')
         );
     }
 }

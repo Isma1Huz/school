@@ -174,16 +174,21 @@ redis.call('SETEX', last_refill_key, ttl, tostring(now_ms))
 return {1, math.floor(new_tokens), 0}
 LUA;
 
-        $result = Redis::connection('default')->eval(
-            $lua,
-            2,
-            $tokensKey,
-            $lastRefillKey,
-            $capacity,
-            $refillRate,
-            $nowMs,
-            $ttl,
-        );
+        try {
+            $result = Redis::connection('default')->eval(
+                $lua,
+                2,
+                $tokensKey,
+                $lastRefillKey,
+                $capacity,
+                $refillRate,
+                $nowMs,
+                $ttl,
+            );
+        } catch (\Throwable) {
+            // Redis unavailable — allow the request through (fail open)
+            return ['allowed' => true, 'remaining' => $capacity - 1, 'retry_after' => 0];
+        }
 
         return [
             'allowed'     => (bool) ($result[0] ?? false),
@@ -198,7 +203,13 @@ LUA;
 
     private function slidingWindow(string $key, int $limit, int $windowSeconds): array
     {
-        $redis  = Redis::connection('default')->client();
+        try {
+            $redis  = Redis::connection('default')->client();
+        } catch (\Throwable) {
+            // Redis unavailable — allow the request through (fail open)
+            return ['allowed' => true, 'remaining' => $limit - 1, 'retry_after' => 0];
+        }
+
         $nowMs  = (int) (microtime(true) * 1000);
         $cutoff = $nowMs - ($windowSeconds * 1000);
         $ttl    = $windowSeconds * 2;
