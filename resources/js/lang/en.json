@@ -1,0 +1,71 @@
+{
+    "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "view": "View",
+        "back": "Back",
+        "search": "Search",
+        "filter": "Filter",
+        "export": "Export",
+        "import": "Import",
+        "loading": "Loading…",
+        "noData": "No data available",
+        "confirm": "Confirm",
+        "yes": "Yes",
+        "no": "No",
+        "actions": "Actions",
+        "status": "Status",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "address": "Address",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At"
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "academics": "Academics",
+        "finance": "Finance",
+        "inventory": "Inventory",
+        "hr": "HR",
+        "communication": "Communication",
+        "settings": "Settings",
+        "users": "Users",
+        "roles": "Roles",
+        "logout": "Logout",
+        "profile": "Profile"
+    },
+    "auth": {
+        "login": "Sign In",
+        "logout": "Sign Out",
+        "register": "Register",
+        "forgotPassword": "Forgot Password",
+        "resetPassword": "Reset Password",
+        "email": "Email Address",
+        "password": "Password",
+        "rememberMe": "Remember Me",
+        "noAccount": "Don't have an account?",
+        "haveAccount": "Already have an account?"
+    },
+    "tenant": {
+        "name": "Tenant Name",
+        "slug": "Subdomain",
+        "type": "Tenant Type",
+        "status": "Status",
+        "subscription": "Subscription",
+        "plan": "Plan",
+        "modules": "Modules",
+        "settings": "Settings"
+    },
+    "module": {
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "enable": "Enable",
+        "disable": "Disable",
+        "dependencies": "Dependencies",
+        "settings": "Module Settings"
+    }
+}

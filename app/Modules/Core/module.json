@@ -1,0 +1,59 @@
+{
+    "name": "Core",
+    "key": "core",
+    "icon": "HomeIcon",
+    "description": "Core platform module — always enabled",
+    "version": "1.0.0",
+    "allowed_tenant_types": ["school", "business", "ngo", "church"],
+    "dependencies": [],
+    "permissions": [
+        "core:access_dashboard",
+        "core:manage_settings",
+        "core:manage_users"
+    ],
+    "settings_schema": {
+        "sms_provider": {
+            "type": "enum",
+            "options": ["africas_talking", "safaricom", "twilio"],
+            "default": "africas_talking",
+            "label": "SMS Provider",
+            "required": true
+        },
+        "sms_sender_id": {
+            "type": "string",
+            "max": 11,
+            "default": null,
+            "label": "SMS Sender ID",
+            "required": false
+        },
+        "email_from_name": {
+            "type": "string",
+            "max": 100,
+            "default": null,
+            "label": "Email From Name",
+            "required": false
+        },
+        "push_notifications_enabled": {
+            "type": "boolean",
+            "default": false,
+            "label": "Enable Push Notifications",
+            "required": false
+        },
+        "timezone": {
+            "type": "enum",
+            "options": ["Africa/Nairobi", "Africa/Lagos", "UTC"],
+            "default": "Africa/Nairobi",
+            "label": "Timezone",
+            "required": true
+        },
+        "currency": {
+            "type": "enum",
+            "options": ["KES", "USD", "UGX", "TZS"],
+            "default": "KES",
+            "label": "Currency",
+            "required": true
+        }
+    },
+    "sort_order": 0,
+    "is_core": true
+}

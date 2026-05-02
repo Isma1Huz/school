@@ -1,0 +1,71 @@
+{
+    "common": {
+        "save": "Hifadhi",
+        "cancel": "Ghairi",
+        "delete": "Futa",
+        "edit": "Hariri",
+        "create": "Unda",
+        "view": "Tazama",
+        "back": "Rudi",
+        "search": "Tafuta",
+        "filter": "Chuja",
+        "export": "Hamisha",
+        "import": "Ingiza",
+        "loading": "Inapakia…",
+        "noData": "Hakuna data",
+        "confirm": "Thibitisha",
+        "yes": "Ndio",
+        "no": "Hapana",
+        "actions": "Vitendo",
+        "status": "Hali",
+        "name": "Jina",
+        "email": "Barua Pepe",
+        "phone": "Simu",
+        "address": "Anwani",
+        "createdAt": "Iliundwa",
+        "updatedAt": "Ilirekebishwa"
+    },
+    "nav": {
+        "dashboard": "Dashibodi",
+        "academics": "Masomo",
+        "finance": "Fedha",
+        "inventory": "Bidhaa",
+        "hr": "Rasilimali Watu",
+        "communication": "Mawasiliano",
+        "settings": "Mipangilio",
+        "users": "Watumiaji",
+        "roles": "Majukumu",
+        "logout": "Toka",
+        "profile": "Wasifu"
+    },
+    "auth": {
+        "login": "Ingia",
+        "logout": "Toka",
+        "register": "Jisajili",
+        "forgotPassword": "Umesahau Nywila",
+        "resetPassword": "Weka Upya Nywila",
+        "email": "Anwani ya Barua Pepe",
+        "password": "Nywila",
+        "rememberMe": "Nikumbuke",
+        "noAccount": "Huna akaunti?",
+        "haveAccount": "Una akaunti tayari?"
+    },
+    "tenant": {
+        "name": "Jina la Tenant",
+        "slug": "Subdomain",
+        "type": "Aina ya Tenant",
+        "status": "Hali",
+        "subscription": "Usajili",
+        "plan": "Mpango",
+        "modules": "Moduli",
+        "settings": "Mipangilio"
+    },
+    "module": {
+        "enabled": "Imewezeshwa",
+        "disabled": "Imezimwa",
+        "enable": "Wezesha",
+        "disable": "Zima",
+        "dependencies": "Mahitaji",
+        "settings": "Mipangilio ya Moduli"
+    }
+}
