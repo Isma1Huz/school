@@ -10,9 +10,23 @@ createInertiaApp({
 
     resolve: (name) => {
         const pages = import.meta.glob<{ default: React.ComponentType }>('./pages/**/*.tsx', { eager: true });
-        const page = pages[`./pages/${name}.tsx`];
-        if (!page) throw new Error(`Page not found: ${name}`);
-        return page;
+
+        // Direct match (exact case)
+        if (pages[`./pages/${name}.tsx`]) {
+            return pages[`./pages/${name}.tsx`];
+        }
+
+        // Case-insensitive fallback (controllers use PascalCase, files use lowercase dirs).
+        // Build a lowercase-key map once to avoid iterating on every lookup.
+        const lowerMap: Record<string, { default: React.ComponentType }> = {};
+        for (const [key, value] of Object.entries(pages)) {
+            lowerMap[key.toLowerCase()] = value;
+        }
+
+        const fallback = lowerMap[`./pages/${name}.tsx`.toLowerCase()];
+        if (fallback) return fallback;
+
+        throw new Error(`Page not found: ${name}`);
     },
 
     strictMode: true,

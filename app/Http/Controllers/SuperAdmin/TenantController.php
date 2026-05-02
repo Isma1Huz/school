@@ -11,6 +11,27 @@ use Inertia\Response;
 
 class TenantController extends Controller
 {
+    public function create(): Response
+    {
+        $plans = \App\Models\SubscriptionPlan::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get(['id', 'name']);
+
+        return Inertia::render('SuperAdmin/Tenants/Create', compact('plans'));
+    }
+
+    public function edit(Tenant $tenant): Response
+    {
+        $plans = \App\Models\SubscriptionPlan::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get(['id', 'name']);
+
+        return Inertia::render('SuperAdmin/Tenants/Edit', [
+            'tenant' => $this->formatTenant($tenant),
+            'plans'  => $plans,
+        ]);
+    }
+
     public function index(): Response
     {
         $tenants = Tenant::withTrashed()

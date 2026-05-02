@@ -76,7 +76,7 @@ export default function EditTenant() {
             <TextInput label="Email" type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} error={errors.email} />
             <div className="grid grid-cols-2 gap-4">
               <SelectInput label="Subscription Plan" options={planOptions} value={data.subscription_plan_id} onChange={(v) => setData('subscription_plan_id', v)} error={errors.subscription_plan_id} placeholder="No plan" />
-              <SelectInput label="Subscription Status" options={subscriptionStatuses} value={data.subscription_status} onChange={(v) => setData('subscription_status', v)} error={errors.subscription_status} />
+              <SelectInput label="Subscription Status" options={subscriptionStatuses} value={data.subscription_status} onChange={(v) => setData('subscription_status', v as import('@/types').SubscriptionStatus)} error={errors.subscription_status} />
             </div>
             <div className="flex gap-3 pt-2">
               <Button type="submit" disabled={processing} className="bg-[#800020] hover:bg-[#6b001b]">{processing ? 'Saving…' : 'Save Changes'}</Button>

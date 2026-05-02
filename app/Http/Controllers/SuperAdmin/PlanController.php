@@ -11,6 +11,25 @@ use Inertia\Response;
 
 class PlanController extends Controller
 {
+    public function create(): Response
+    {
+        return Inertia::render('SuperAdmin/SubscriptionPlans/Create');
+    }
+
+    /**
+     * Redirect to index: plans do not have a dedicated detail page.
+     * The route exists because Route::resource generates it; we redirect rather than 404.
+     */
+    public function show(SubscriptionPlan $plan): \Illuminate\Http\RedirectResponse
+    {
+        return redirect()->route('super-admin.plans.index');
+    }
+
+    public function edit(SubscriptionPlan $plan): Response
+    {
+        return Inertia::render('SuperAdmin/SubscriptionPlans/Edit', compact('plan'));
+    }
+
     public function index(): Response
     {
         $plans = SubscriptionPlan::withCount('tenants')

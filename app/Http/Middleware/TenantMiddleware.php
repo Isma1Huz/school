@@ -16,6 +16,11 @@ class TenantMiddleware
         $host   = $request->getHost();
         $tenant = $this->tenantService->resolveFromHost($host);
 
+        // Local development fallback: resolve from LOCAL_TENANT_SLUG env variable
+        if (!$tenant && app()->environment('local') && $localSlug = config('app.local_tenant_slug')) {
+            $tenant = $this->tenantService->resolveFromSlug($localSlug);
+        }
+
         if (!$tenant) {
             abort(404, 'Tenant not found.');
         }

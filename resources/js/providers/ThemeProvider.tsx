@@ -19,16 +19,23 @@ const ThemeContext = createContext<ThemeContextValue>({
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const tenant = useTenant();
-    const [theme, setThemeState] = useState<Theme>(
-        (localStorage.getItem('theme') as Theme) ?? 'light',
-    );
+    const [theme, setThemeState] = useState<Theme>(() => {
+        if (typeof localStorage === 'undefined') return 'light';
+        try {
+            return (localStorage.getItem('theme') as Theme) ?? 'light';
+        } catch {
+            return 'light';
+        }
+    });
 
     const primaryColor = tenant?.primary_color ?? '#800020';
     const secondaryColor = tenant?.secondary_color ?? '#FFD700';
 
     function setTheme(t: Theme) {
         setThemeState(t);
-        localStorage.setItem('theme', t);
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('theme', t);
+        }
     }
 
     useEffect(() => {

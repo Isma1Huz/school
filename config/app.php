@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'local_tenant_slug' => env('LOCAL_TENANT_SLUG'),
+
 ];

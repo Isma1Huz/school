@@ -42,7 +42,21 @@ class LoginController extends Controller
                 : redirect('/soc');
         }
 
-        // Tenant-scoped users: enforce that the resolved tenant matches
+        // Tenant-scoped users: resolve tenant if not yet bound
+        if (!app()->has('tenant')) {
+            $tenantService = app(\App\Services\TenantService::class);
+            $tenant = $tenantService->resolveFromHost($request->getHost());
+
+            // Local development fallback
+            if (!$tenant && app()->environment('local') && $localSlug = config('app.local_tenant_slug')) {
+                $tenant = $tenantService->resolveFromSlug($localSlug);
+            }
+
+            if ($tenant) {
+                $tenantService->bindCurrentTenant($tenant);
+            }
+        }
+
         if (app()->has('tenant')) {
             $tenant = app('tenant');
             if ($user->tenant_id !== $tenant->id) {

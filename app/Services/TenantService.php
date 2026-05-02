@@ -11,32 +11,38 @@ class TenantService
 
     /**
      * Resolve the current tenant from a subdomain or custom domain.
+     * We cache only the tenant ID to avoid __PHP_Incomplete_Class issues with serialized models.
      */
     public function resolveFromHost(string $host): ?Tenant
     {
-        return Cache::remember("tenant_host_{$host}", self::CACHE_TTL, function () use ($host) {
+        $id = Cache::remember("tenant_host_{$host}", self::CACHE_TTL, function () use ($host) {
             // Check custom domain first
-            $tenant = Tenant::where('settings->custom_domain', $host)->first();
+            $customDomainId = Tenant::where('settings->custom_domain', $host)->value('id');
 
-            if ($tenant) {
-                return $tenant;
+            if ($customDomainId) {
+                return $customDomainId;
             }
 
             // Fall back to subdomain: e.g. "school1.schoolzee.test" → slug "school1"
             $slug = explode('.', $host)[0];
 
-            return Tenant::where('slug', $slug)->first();
+            return Tenant::where('slug', $slug)->value('id');
         });
+
+        return $id ? Tenant::find($id) : null;
     }
 
     /**
      * Resolve a tenant by its slug.
+     * We cache only the tenant ID to avoid __PHP_Incomplete_Class issues with serialized models.
      */
     public function resolveFromSlug(string $slug): ?Tenant
     {
-        return Cache::remember("tenant_slug_{$slug}", self::CACHE_TTL, function () use ($slug) {
-            return Tenant::where('slug', $slug)->first();
+        $id = Cache::remember("tenant_slug_{$slug}", self::CACHE_TTL, function () use ($slug) {
+            return Tenant::where('slug', $slug)->value('id');
         });
+
+        return $id ? Tenant::find($id) : null;
     }
 
     /**
