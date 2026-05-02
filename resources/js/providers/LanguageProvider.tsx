@@ -4,12 +4,21 @@ import { I18nextProvider, initReactI18next } from 'react-i18next';
 import en from '@/lang/en.json';
 import sw from '@/lang/sw.json';
 
+const safeGetStorage = (key: string): string | null => {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+        return localStorage.getItem(key);
+    } catch {
+        return null;
+    }
+};
+
 i18n.use(initReactI18next).init({
     resources: {
         en: { translation: en },
         sw: { translation: sw },
     },
-    lng: localStorage.getItem('language') ?? 'en',
+    lng: safeGetStorage('language') ?? 'en',
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
 });
@@ -25,13 +34,13 @@ const LanguageContext = createContext<LanguageContextValue>({
 });
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-    const [language, setLanguageState] = useState<string>(
-        localStorage.getItem('language') ?? 'en',
-    );
+    const [language, setLanguageState] = useState<string>(() => safeGetStorage('language') ?? 'en');
 
     function setLanguage(lang: string) {
         setLanguageState(lang);
-        localStorage.setItem('language', lang);
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('language', lang);
+        }
         void i18n.changeLanguage(lang);
     }
 
