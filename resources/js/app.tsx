@@ -16,10 +16,15 @@ createInertiaApp({
             return pages[`./pages/${name}.tsx`];
         }
 
-        // Case-insensitive fallback (controllers use PascalCase, files use lowercase dirs)
-        const needle = `./pages/${name}.tsx`.toLowerCase();
-        const match = Object.entries(pages).find(([key]) => key.toLowerCase() === needle);
-        if (match) return match[1];
+        // Case-insensitive fallback (controllers use PascalCase, files use lowercase dirs).
+        // Build a lowercase-key map once to avoid iterating on every lookup.
+        const lowerMap: Record<string, { default: React.ComponentType }> = {};
+        for (const [key, value] of Object.entries(pages)) {
+            lowerMap[key.toLowerCase()] = value;
+        }
+
+        const fallback = lowerMap[`./pages/${name}.tsx`.toLowerCase()];
+        if (fallback) return fallback;
 
         throw new Error(`Page not found: ${name}`);
     },

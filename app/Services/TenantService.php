@@ -17,10 +17,10 @@ class TenantService
     {
         $id = Cache::remember("tenant_host_{$host}", self::CACHE_TTL, function () use ($host) {
             // Check custom domain first
-            $tenant = Tenant::where('settings->custom_domain', $host)->first();
+            $customDomainId = Tenant::where('settings->custom_domain', $host)->value('id');
 
-            if ($tenant) {
-                return $tenant->id;
+            if ($customDomainId) {
+                return $customDomainId;
             }
 
             // Fall back to subdomain: e.g. "school1.schoolzee.test" → slug "school1"
